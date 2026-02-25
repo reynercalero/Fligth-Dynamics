@@ -8,7 +8,7 @@ switch caso_vuelo
         phi = 0;
         theta = 5;
         psi = 0;
-        Vb = [650; 0; 100];
+        Vb = [647.52; 0; 56.65];
     case 'B' % Climb
         phi = 0;
         theta = 10;

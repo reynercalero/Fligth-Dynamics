@@ -4,15 +4,15 @@ function [alpha, beta, gamma] =angulos_aeros(Vb, theta)
     Vtotal = norm(Vb);
 
     % angulo de ataque (alpha)
-    alpha = rad2deg(atan2(w, u));
+    alpha =rad2deg(atan2(w, u));
 
     % angulo de sidelisp (beta)
     if Vtotal == 0
         beta = 0;
     else
-        beta =(asin(v / Vtotal));
+        beta = rad2deg(asin(v / Vtotal));
     end
 
-    % Ángulo de climb (gamma)
+    %angulo de climb
     gamma = theta - alpha;
 end
