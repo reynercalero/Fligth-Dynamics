@@ -1,35 +1,60 @@
-clear all; clc;
+[alpha, beta, gamma, t] = angulos_aeros();
+[t,phi,theta,psi,phi_dt,theta_dt,psi_dt]=attitude();
+[t,px,py,pz,Vx,Vy,Vz,Xac,Yac,Zac,a_ned,a_real]=posicion();
 
-% Cambiar indices segun se requiera
-caso_vuelo = 'A';
+##figure(1);
+##plot(t, alpha, 'r', 'DisplayName', 'Alpha'); hold on;
+##plot(t, beta, 'b', 'DisplayName', 'Beta');
+##plot(t, gamma, 'g', 'DisplayName', 'Gamma');
+##grid on;
+##xlabel('Tiempo (s)');
+##ylabel('Ángulos (deg)');
+##legend()
 
-switch caso_vuelo
-    case 'A' % vuelo recto y nivelado
-        phi = 0;
-        theta = 5;
-        psi = 0;
-        Vb = [647.52; 0; 56.65];
-    case 'B' % Climb
-        phi = 0;
-        theta = 10;
-        psi = 0;
-        Vb = [98; 0; 5];
-    case 'C' % Aircraft Turn
-        phi = 30;
-        theta = 5;
-        psi = 45;
-        Vb = [100; 2; 0];
-end
+figure(2);
+subplot(3,1,1);
+plot(t,rad2deg(phi),'r','lineWidth',1.2);
+grid on;
+ylabel('Roll \phi (deg)');
+title('Actitud de la Aeronave (Ángulos de Euler)');
+subplot(3,1,2);
+plot(t, rad2deg(theta), 'g', 'LineWidth', 1.2);
+grid on;
+ylabel('Pitch \theta (deg)');
+subplot(3,1,3);
+plot(t, rad2deg(psi), 'b', 'LineWidth', 1.2);
+grid on;
+ylabel('Yaw \psi (deg)');
+xlabel('Tiempo (s)');
 
-R = matriz_rotacion(phi, theta, psi);
-Vned = R * Vb;
-[alpha, beta, gamma] =angulos_aeros(Vb, theta);
+figure(3);
+plot3(py, px, pz, 'b', 'LineWidth', 2);
+grid on;
+axis equal;
+xlabel('East [m]');
+ylabel('North [m]');
+zlabel('Altura (Altitude) [m]');
+title('Recorrido Espacial en marco NED');
 
-fprintf('=== Resultados caso de vuelo %s ===\n', caso_vuelo);
-fprintf('Angulos Euler [deg]: Roll: %.1f, Pitch: %.1f, Yaw: %.1f\n', phi, theta, psi);
-fprintf('Velocidad body [u,v,w]: [%.1f, %.1f, %.1f]\n', Vb(1), Vb(2), Vb(3));
-fprintf('------------------------------------\n');
-fprintf('Velocidad NED [N,E,D]:  [%.2f, %.2f, %.2f] Km/h \n', Vned(1), Vned(2), Vned(3));
-fprintf('Angulos aero: Alpha: %.2f°, Beta: %.2f°, Gamma: %.2f°\n', alpha, beta, gamma);
-visualizador(R, Vb, caso_vuelo)
+hold on;
+plot3(py(1), px(1), pz(1), 'go', 'MarkerFaceColor', 'g');
+plot3(py(end), px(end), pz(end), 'ro', 'MarkerFaceColor', 'r');
+legend('Trayectoria', 'Inicio', 'Fin');
 
+figure(4);
+subplot(3,1,1);
+plot(t, px, 'r','lineWidth',1.2);
+grid on;
+ylabel('North [m]');
+title('Evolución Temporal de la Posición');
+
+subplot(3,1,2);
+plot(t, py, 'g','lineWidth',1.2);
+grid on;
+ylabel('East [m]');
+
+subplot(3,1,3);
+plot(t, pz, 'b','lineWidth',1.2);
+grid on;
+ylabel('Altura [m]');
+xlabel('Tiempo [s]');

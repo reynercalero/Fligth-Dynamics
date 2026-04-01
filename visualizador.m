@@ -40,4 +40,5 @@ function visualizador(R, Vb,caso_vuelo)
     title(['Gráfica de Transformación: Caso ', caso_vuelo]);
     xlabel('Norte'); ylabel('Este'); zlabel('Abajo');
     axis off;
+
 end
